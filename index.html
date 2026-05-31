@@ -1,66 +1,50 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Google Web App</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            background-color: #f4f4f9;
-        }
-        
-        /* ตกแต่งปุ่มสำหรับมือถือ */
-        .mobile-btn-container {
-            text-align: center;
-            padding: 12px;
-            background-color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            z-index: 10;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #1a73e8; /* สีน้ำเงินสไตล์ Google */
-            color: #ffffff;
-            text-decoration: none;
-            font-family: sans-serif;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 8px;
-            transition: background-color 0.3s;
-        }
-        
-        .btn:hover {
-            background-color: #1557b0;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#08070f" />
+  <title>ห้องเรียนออนไลน์ สกร.</title>
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #08070f;
+    }
 
-        iframe {
-            flex-grow: 1;
-            width: 100%;
-            border: none;
-        }
-    </style>
+    .app-frame {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #08070f;
+    }
+
+    .loading {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: #c4b5fd;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      background: radial-gradient(circle at 50% 20%, #16152a 0%, #08070f 62%);
+      z-index: 0;
+    }
+  </style>
 </head>
 <body>
-
-    <!-- ปุ่มสำหรับกดเปิดลิงก์ตรงๆ (ช่วยแก้ปัญหาจอขาวในมือถือ) -->
-    <div class="mobile-btn-container">
-        <a href="https://script.google.com/macros/s/AKfycbxoUIQC0kYlbCzSdzEp6HFtZOQgjH2BWyYrw9eNUBiriZ0V4gVL1_KBuqn_PkzMLwEg/exec" target="_blank" class="btn">
-            🚀 เปิดใช้งานแอปพลิเคชัน (คลิกที่นี่หากหน้าจอด้านล่างไม่โหลด)
-        </a>
-    </div>
-
-    <!-- ส่วนของการแสดงผล Web App -->
-    <iframe 
-        src="https://script.google.com/macros/s/AKfycbxoUIQC0kYlbCzSdzEp6HFtZOQgjH2BWyYrw9eNUBiriZ0V4gVL1_KBuqn_PkzMLwEg/exec" 
-        allowfullscreen>
-    </iframe>
-
+  <div class="loading">กำลังเปิดระบบห้องเรียนออนไลน์...</div>
+  <iframe
+    class="app-frame"
+    src="https://script.google.com/macros/s/AKfycbzTzwYnbdkJrYACCD4qQ9wVAVMYTJRY4V-EaxyJs3wyYYad0M6fP0E--GT8-X4nJAI1/exec"
+    allow="geolocation; camera; microphone; fullscreen"
+    allowfullscreen>
+  </iframe>
 </body>
 </html>
