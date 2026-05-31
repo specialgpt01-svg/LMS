@@ -6,6 +6,16 @@
   <meta name="theme-color" content="#08070f" />
   <title>ห้องเรียนออนไลน์ สกร.</title>
   <style>
+    :root {
+      --bg-root: #08070f;
+      --bg-card: #16152a;
+      --text: #f1f0ff;
+      --muted: #b8acd8;
+      --accent: #8b5cf6;
+      --accent-2: #06b6d4;
+      --border: rgba(255,255,255,0.12);
+    }
+
     html,
     body {
       width: 100%;
@@ -13,7 +23,9 @@
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background: #08070f;
+      background: var(--bg-root);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     .app-frame {
@@ -22,7 +34,7 @@
       width: 100%;
       height: 100%;
       border: 0;
-      background: #08070f;
+      background: var(--bg-root);
     }
 
     .loading {
@@ -31,20 +43,167 @@
       display: grid;
       place-items: center;
       color: #c4b5fd;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       font-size: 14px;
       background: radial-gradient(circle at 50% 20%, #16152a 0%, #08070f 62%);
       z-index: 0;
+    }
+
+    .browser-gate {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: radial-gradient(circle at 50% 0%, rgba(99,102,241,0.2), transparent 42%), var(--bg-root);
+      z-index: 10;
+      box-sizing: border-box;
+    }
+
+    .browser-gate.show {
+      display: flex;
+    }
+
+    .gate-card {
+      width: min(440px, 100%);
+      background: rgba(22,21,42,0.94);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 18px 48px rgba(0,0,0,0.42);
+      box-sizing: border-box;
+    }
+
+    .gate-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      line-height: 1.3;
+    }
+
+    p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 15px;
+    }
+
+    .actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 16px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      text-decoration: none;
+      font-weight: 700;
+      cursor: pointer;
+      box-sizing: border-box;
+      font-size: 15px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.06);
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    .hint {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #8f84b6;
     }
   </style>
 </head>
 <body>
   <div class="loading">กำลังเปิดระบบห้องเรียนออนไลน์...</div>
+
+  <div class="browser-gate" id="browser-gate" aria-live="polite">
+    <div class="gate-card">
+      <div class="gate-icon">ส</div>
+      <h1>เปิดระบบผ่านเบราว์เซอร์หลัก</h1>
+      <p>
+        Messenger หรือ In-App Browser บางรุ่นบล็อก cookie/storage ของ Google Apps Script
+        ทำให้ขึ้นข้อความว่าไม่สามารถเปิดไฟล์ได้ กรุณาเปิดด้วย Chrome หรือ Safari
+      </p>
+      <div class="actions">
+        <a class="btn btn-primary" id="open-external" href="#" target="_blank" rel="noopener">เปิดใน Chrome</a>
+        <button class="btn btn-secondary" id="copy-link" type="button">คัดลอกลิงก์</button>
+      </div>
+      <div class="hint">
+        ถ้าปุ่มเปิด Chrome ไม่ทำงาน ให้กดเมนูจุดสามจุดของ Messenger แล้วเลือก "เปิดในเบราว์เซอร์"
+      </div>
+    </div>
+  </div>
+
   <iframe
     class="app-frame"
+    id="app-frame"
     src="https://script.google.com/macros/s/AKfycbzTzwYnbdkJrYACCD4qQ9wVAVMYTJRY4V-EaxyJs3wyYYad0M6fP0E--GT8-X4nJAI1/exec"
     allow="geolocation; camera; microphone; fullscreen"
     allowfullscreen>
   </iframe>
+
+  <script>
+    const APP_URL = 'https://script.google.com/macros/s/AKfycbzTzwYnbdkJrYACCD4qQ9wVAVMYTJRY4V-EaxyJs3wyYYad0M6fP0E--GT8-X4nJAI1/exec';
+
+    function isInAppBrowser() {
+      const ua = navigator.userAgent || '';
+      return /FBAN|FBAV|FB_IAB|Messenger|Line\/|Instagram|MicroMessenger|TikTok|Twitter|LinkedInApp/i.test(ua);
+    }
+
+    function getExternalUrl() {
+      const ua = navigator.userAgent || '';
+      if (/Android/i.test(ua)) {
+        const noScheme = APP_URL.replace(/^https?:\/\//, '');
+        return 'intent://' + noScheme + '#Intent;scheme=https;package=com.android.chrome;end';
+      }
+      if (/CriOS|Chrome/i.test(ua)) return APP_URL;
+      if (/iPhone|iPad|iPod/i.test(ua)) {
+        return APP_URL.replace(/^https?:\/\//, 'googlechrome://');
+      }
+      return APP_URL;
+    }
+
+    async function copyAppLink() {
+      try {
+        await navigator.clipboard.writeText(APP_URL);
+        document.getElementById('copy-link').textContent = 'คัดลอกแล้ว';
+      } catch (e) {
+        prompt('คัดลอกลิงก์นี้ไปเปิดใน Chrome หรือ Safari', APP_URL);
+      }
+    }
+
+    if (isInAppBrowser()) {
+      document.getElementById('browser-gate').classList.add('show');
+      document.getElementById('app-frame').style.display = 'none';
+      document.getElementById('open-external').href = getExternalUrl();
+      document.getElementById('copy-link').addEventListener('click', copyAppLink);
+    }
+  </script>
 </body>
 </html>
