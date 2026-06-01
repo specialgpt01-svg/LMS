@@ -163,13 +163,15 @@
   <iframe
     class="app-frame"
     id="app-frame"
-    src="https://script.google.com/macros/s/AKfycbzTzwYnbdkJrYACCD4qQ9wVAVMYTJRY4V-EaxyJs3wyYYad0M6fP0E--GT8-X4nJAI1/exec"
+    src="about:blank"
     allow="geolocation; camera; microphone; fullscreen"
     allowfullscreen>
   </iframe>
 
   <script>
     const APP_URL = 'https://script.google.com/macros/s/AKfycbzTzwYnbdkJrYACCD4qQ9wVAVMYTJRY4V-EaxyJs3wyYYad0M6fP0E--GT8-X4nJAI1/exec';
+    const APP_VERSION = '87';
+    const APP_FRAME_URL = APP_URL + '?v=' + encodeURIComponent(APP_VERSION);
 
     function isInAppBrowser() {
       const ua = navigator.userAgent || '';
@@ -179,24 +181,26 @@
     function getExternalUrl() {
       const ua = navigator.userAgent || '';
       if (/Android/i.test(ua)) {
-        const noScheme = APP_URL.replace(/^https?:\/\//, '');
+        const noScheme = APP_FRAME_URL.replace(/^https?:\/\//, '');
         return 'intent://' + noScheme + '#Intent;scheme=https;package=com.android.chrome;end';
       }
-      if (/CriOS|Chrome/i.test(ua)) return APP_URL;
+      if (/CriOS|Chrome/i.test(ua)) return APP_FRAME_URL;
       if (/iPhone|iPad|iPod/i.test(ua)) {
-        return APP_URL.replace(/^https?:\/\//, 'googlechrome://');
+        return APP_FRAME_URL.replace(/^https?:\/\//, 'googlechrome://');
       }
-      return APP_URL;
+      return APP_FRAME_URL;
     }
 
     async function copyAppLink() {
       try {
-        await navigator.clipboard.writeText(APP_URL);
+        await navigator.clipboard.writeText(APP_FRAME_URL);
         document.getElementById('copy-link').textContent = 'คัดลอกแล้ว';
       } catch (e) {
-        prompt('คัดลอกลิงก์นี้ไปเปิดใน Chrome หรือ Safari', APP_URL);
+        prompt('คัดลอกลิงก์นี้ไปเปิดใน Chrome หรือ Safari', APP_FRAME_URL);
       }
     }
+
+    document.getElementById('app-frame').src = APP_FRAME_URL;
 
     if (isInAppBrowser()) {
       document.getElementById('browser-gate').classList.add('show');
